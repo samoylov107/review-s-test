@@ -1,0 +1,22 @@
+   WITH CTE (id) AS
+(SELECT 1 UNION ALL
+ SELECT 5 UNION ALL
+ SELECT 8 UNION ALL
+ SELECT 11 UNION ALL
+ SELECT 13),
+ 
+   NUMS AS
+(SELECT ROW_NUMBER() OVER(ORDER BY ISNULL(f,999)) AS f_num, f, 
+        ROW_NUMBER() OVER(ORDER BY ISNULL(l,999)) AS l_num, l
+   FROM
+(SELECT CASE WHEN id + 1 < next_id THEN id + 1 ELSE NULL END AS f,
+        CASE WHEN id + 1 > previous_id THEN id - 1 ELSE NULL END AS l
+   FROM
+(SELECT LAG(id) OVER(ORDER BY id) AS previous_id, id, LEAD(id) OVER(ORDER BY id) AS next_id
+   FROM CTE) z1) z2)
+
+
+   SELECT CONCAT('(', n1.f, ',', n2.l, ')') AS result
+     FROM NUMS AS n1
+	   JOIN NUMS AS n2 ON n1.f_num = n2.l_num
+	  WHERE n1.f IS NOT NULL
