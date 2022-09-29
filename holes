@@ -18,5 +18,5 @@
 
    SELECT CONCAT('(', n1.f, ',', n2.l, ')') AS result
      FROM NUMS AS n1
-	   JOIN NUMS AS n2 ON n1.f_num = n2.l_num
-	  WHERE n1.f IS NOT NULL
+     JOIN NUMS AS n2 ON n1.f_num = n2.l_num
+    WHERE n1.f IS NOT NULL
